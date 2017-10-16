@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+<changeSet id="5/10/2017" author="ducnguyen">
+	<createTable tableName="product">
+		<column name="product_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="item" type="integer"></column>
+		<column name="class" type="varchar"></column>
+		<column name="inventory" type="varchar"></column>
+	</createTable>
+	
+	<createTable tableName="location">
+		<column name="location_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="country" type="varchar"></column>
+		<column name="city" type="varchar"></column>
+	</createTable>
+	
+	<createTable tableName="time">
+		<column name="time_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="month" type="integer"></column>
+		<column name="quarter" type="integer"></column>
+		<column name="year" type="integer"></column>
+	</createTable>
+	
+	<createTable tableName="sale">
+		<column name="product_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="time_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="location_id" type="uuid">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="dollars" type="money"></column>
+	</createTable>
+	
+	 <addForeignKeyConstraint baseColumnNames="product_id"
+            baseTableName="sale"
+            constraintName="fk_sale_product"
+            referencedColumnNames="product_id"
+            referencedTableName="product"/>
+            
+     <addForeignKeyConstraint baseColumnNames="time_id"
+            baseTableName="sale"
+            constraintName="fk_sale_time"
+            referencedColumnNames="time_id"
+            referencedTableName="time"/>
+            
+     <addForeignKeyConstraint baseColumnNames="location_id"
+            baseTableName="sale"
+            constraintName="fk_sale_location"
+            referencedColumnNames="location_id"
+            referencedTableName="location"/>
+</changeSet>
+<changeSet id="2" author="ducnguyen">
+	<createTable tableName="user">
+		<column name="user_id" type="integer">
+			<constraints primaryKey="true" nullable="false" />
+		</column>
+		<column name="name" type="varchar"></column>
+		<column name="username" type="varchar">
+			<constraints unique="true" nullable="false"/>
+		</column>
+		<column name="password" type="varchar">
+			<constraints unique="true" nullable="false"/>
+		</column>
+	</createTable>
+	
+	<createTable tableName="role">
+		<column name="role_id" type="integer">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="role_name" type="varchar"></column>
+		<column name="created_date" type="date"></column>
+	</createTable>
+	
+	<createTable tableName="user_role">
+		<column name="user_id" type="integer">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+		<column name="role_id" type="integer">
+			<constraints primaryKey="true" nullable="false"/>
+		</column>
+	</createTable>
+	<addForeignKeyConstraint baseColumnNames="user_id"
+            baseTableName="user_role"
+            constraintName="fk_user_role_user"
+            referencedColumnNames="user_id"
+            referencedTableName="user"/>
+            
+     <addForeignKeyConstraint baseColumnNames="role_id"
+		     baseTableName="user_role"
+		     constraintName="fk_user_role_role"
+		     referencedColumnNames="role_id"
+		     referencedTableName="role"/>
+			
+</changeSet>
+
+</databaseChangeLog>
